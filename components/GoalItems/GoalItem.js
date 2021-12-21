@@ -19,9 +19,13 @@ const GoalItem = ({ value, id, onDelete }) => {
 
 const styles = StyleSheet.create({
   listItem: {
+    backgroundColor: "white",
     padding: 10,
     paddingVertical: 20,
-    marginVertical: 5,
+    borderBottomColor: "#F6F8FA",
+    borderBottomWidth: 1,
+    height: 70,
+    justifyContent: "center",
   },
 });
 

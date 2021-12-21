@@ -1,15 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GoalInput from "./components/GoalInput";
-import GoalItem from "./components/GoalItem";
+import GoalItems from "./components/GoalItems/GoalItems";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
@@ -26,7 +19,8 @@ export default function App() {
     setIsAddMode(false);
   };
 
-  const handleDeleteGoal = (goalId) => {
+  const handleDeleteGoal = (rowMap, goalId) => {
+    closeRow(rowMap, goalId);
     setCourseGoals((currentCourseGoals) =>
       currentCourseGoals.filter((goal) => goal.key !== goalId)
     );
@@ -34,6 +28,12 @@ export default function App() {
 
   const handleCancelAddGoal = () => {
     setIsAddMode(false);
+  };
+
+  const closeRow = (rowMap, rowKey) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
   };
 
   return (
@@ -44,17 +44,12 @@ export default function App() {
         onChange={handleAddGoal}
         onCancel={handleCancelAddGoal}
       />
-      <FlatList
-        keyExtractor={(item, index) => item.key}
-        data={courseGoals}
-        renderItem={(goal) => (
-          <GoalItem
-            value={goal.item.value}
-            id={goal.item.key}
-            onDelete={handleDeleteGoal}
-          />
-        )}
-      ></FlatList>
+      <GoalItems
+        courseGoals={courseGoals}
+        style={styles.listItems}
+        onCloseRow={closeRow}
+        onDelete={handleDeleteGoal}
+      />
       <StatusBar style="auto" />
     </View>
   );
@@ -62,9 +57,17 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 50,
-    // backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
+    paddingVertical: 50,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+  },
+  listItems: {
+    margin: 20,
+    flex: 1,
+    borderColor: "black",
+    borderWidth: 1,
+    backgroundColor: "#ccc",
+    height: 100,
+    width: 100,
   },
 });
